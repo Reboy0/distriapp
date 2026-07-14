@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+:root {
+  /* Bottom nav content height, excluding the device safe area — the single
+     source of truth every fixed/sticky bar measures itself against so they
+     stay aligned on notch/home-indicator devices instead of using guessed
+     pixel offsets. */
+  --nav-h: 4rem;
+}
+
+body {
+  @apply bg-slate-50 font-sans text-slate-900 antialiased;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------- Primitives ------------------------------ */
+
+.badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold leading-none;
+}
+
+.card {
+  @apply rounded-2xl border border-slate-200/80 bg-white shadow-soft transition-shadow;
+}
+
+.card-interactive {
+  @apply card cursor-pointer hover:border-slate-300 hover:shadow-elevated active:scale-[0.99];
+  transition:
+    box-shadow 150ms ease-out,
+    border-color 150ms ease-out,
+    transform 100ms ease-out;
+}
+
+.btn {
+  @apply inline-flex touch-manipulation items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40;
+}
+
+.btn-primary {
+  @apply btn bg-brand-600 text-white shadow-soft hover:bg-brand-700 hover:shadow-elevated;
+}
+
+.btn-secondary {
+  @apply btn border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50;
+}
+
+.btn-danger {
+  @apply btn bg-danger-600 text-white shadow-soft hover:bg-danger-700;
+}
+
+.btn-ghost {
+  @apply btn bg-transparent text-slate-500 hover:bg-slate-100 hover:text-slate-700;
+}
+
+.input {
+  @apply block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[15px] text-slate-900 shadow-soft transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100;
+}
+
+.label {
+  @apply mb-1.5 block text-sm font-medium text-slate-600;
+}
+
+/* --------------------------------- Skeleton -------------------------------- */
+
+.skeleton {
+  @apply animate-pulse rounded-lg bg-slate-200/80;
+}
+
+/* ------------------------------ Utility helpers ---------------------------- */
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Space reserved below scrollable content so it never hides behind the
+   fixed bottom nav, safe area included. */
+.content-bottom-offset {
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 1rem);
+}
+
+/* For bars that float just above the bottom nav (e.g. the cart bar) —
+   keeps them pinned to the nav's top edge on every device. */
+.bottom-nav-offset {
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+}
+
+.animate-in {
+  @apply animate-fade-in;
+}
