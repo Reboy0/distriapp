@@ -34,55 +34,61 @@ body {
 }
 
 /* ------------------------------- Primitives ------------------------------ */
+/* Wrapped in @layer components so utility classes used alongside these
+   (e.g. `pl-10` on an `.input` for a left icon) always win in the cascade —
+   without this, a plain CSS class declared after `@tailwind utilities;` in
+   file order beats utilities of equal specificity, which was silently
+   breaking icon padding on inputs (icon overlapping the placeholder). */
+@layer components {
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold leading-none;
+  }
 
-.badge {
-  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold leading-none;
-}
+  .card {
+    @apply rounded-2xl border border-slate-200/80 bg-white shadow-soft transition-shadow;
+  }
 
-.card {
-  @apply rounded-2xl border border-slate-200/80 bg-white shadow-soft transition-shadow;
-}
+  .card-interactive {
+    @apply card cursor-pointer hover:border-slate-300 hover:shadow-elevated active:scale-[0.99];
+    transition:
+      box-shadow 150ms ease-out,
+      border-color 150ms ease-out,
+      transform 100ms ease-out;
+  }
 
-.card-interactive {
-  @apply card cursor-pointer hover:border-slate-300 hover:shadow-elevated active:scale-[0.99];
-  transition:
-    box-shadow 150ms ease-out,
-    border-color 150ms ease-out,
-    transform 100ms ease-out;
-}
+  .btn {
+    @apply inline-flex touch-manipulation items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40;
+  }
 
-.btn {
-  @apply inline-flex touch-manipulation items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40;
-}
+  .btn-primary {
+    @apply btn bg-brand-600 text-white shadow-soft hover:bg-brand-700 hover:shadow-elevated;
+  }
 
-.btn-primary {
-  @apply btn bg-brand-600 text-white shadow-soft hover:bg-brand-700 hover:shadow-elevated;
-}
+  .btn-secondary {
+    @apply btn border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50;
+  }
 
-.btn-secondary {
-  @apply btn border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50;
-}
+  .btn-danger {
+    @apply btn bg-danger-600 text-white shadow-soft hover:bg-danger-700;
+  }
 
-.btn-danger {
-  @apply btn bg-danger-600 text-white shadow-soft hover:bg-danger-700;
-}
+  .btn-ghost {
+    @apply btn bg-transparent text-slate-500 hover:bg-slate-100 hover:text-slate-700;
+  }
 
-.btn-ghost {
-  @apply btn bg-transparent text-slate-500 hover:bg-slate-100 hover:text-slate-700;
-}
+  .input {
+    @apply block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[15px] text-slate-900 shadow-soft transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100;
+  }
 
-.input {
-  @apply block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[15px] text-slate-900 shadow-soft transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100;
-}
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-slate-600;
+  }
 
-.label {
-  @apply mb-1.5 block text-sm font-medium text-slate-600;
-}
+  /* --------------------------------- Skeleton -------------------------------- */
 
-/* --------------------------------- Skeleton -------------------------------- */
-
-.skeleton {
-  @apply animate-pulse rounded-lg bg-slate-200/80;
+  .skeleton {
+    @apply animate-pulse rounded-lg bg-slate-200/80;
+  }
 }
 
 /* ------------------------------ Utility helpers ---------------------------- */
