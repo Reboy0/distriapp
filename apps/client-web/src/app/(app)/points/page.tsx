@@ -151,7 +151,7 @@ export default function PointsPage() {
               className="btn-primary mt-3 w-full py-3 text-base"
             >
               <Package size={20} weight="bold" />
-              Каталог
+              Зробити замовлення
             </Link>
           </div>
         ))}

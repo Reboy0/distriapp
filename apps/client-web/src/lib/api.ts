@@ -6,8 +6,18 @@ import { mockCatalog, mockChatMessages, mockOrders, mockPoints } from "./mockDat
  * Thin typed API client for the client-facing (store representative) app.
  * Same request/fallback shape as distributor-web/admin-web for consistency.
  */
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
+function resolveApiBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_BASE_URL) return process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (typeof window !== "undefined") {
+    // Single-VPS deploy with no domain yet: reach the backend on the same
+    // host the app was opened from, fixed port 8000 — works for localhost,
+    // a bare IP, or a domain without any per-deploy env var.
+    return `${window.location.protocol}//${window.location.hostname}:8000/api/v1`;
+  }
+  return "http://localhost:8000/api/v1";
+}
+
+export const API_BASE_URL = resolveApiBaseUrl();
 
 class ApiError extends Error {
   constructor(
@@ -81,6 +91,10 @@ export function createPoint(name: string, address: string): Promise<PointOfSale>
 export function listOrders(pointId?: string): Promise<Order[]> {
   const query = pointId ? `?point_id=${encodeURIComponent(pointId)}` : "";
   return withFallback(() => request<Order[]>(`/orders${query}`), mockOrders, "GET /orders");
+}
+
+export function getOrder(orderId: string): Promise<Order> {
+  return request<Order>(`/orders/${orderId}`);
 }
 
 export interface OrderItemInput {

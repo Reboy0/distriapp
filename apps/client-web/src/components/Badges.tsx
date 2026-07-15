@@ -1,10 +1,8 @@
 import {
   CheckCircle,
-  Clock,
   Sparkle,
   WarningCircle,
   XCircle,
-  PaperPlaneTilt,
   Prohibit,
   CircleDashed,
 } from "@phosphor-icons/react/dist/ssr";
@@ -46,20 +44,20 @@ export function NewBadge() {
 export function OrderStatusBadge({ status }: { status: OrderStatus }) {
   const map: Record<OrderStatus, string> = {
     created: "bg-slate-100 text-slate-600",
-    pending_1c: "bg-warning-50 text-warning-700",
-    sent_to_1c: "bg-brand-50 text-brand-700",
+    pending_1c: "bg-slate-100 text-slate-600",
+    sent_to_1c: "bg-slate-100 text-slate-600",
     cancelled: "bg-danger-50 text-danger-700",
   };
   const labels: Record<OrderStatus, string> = {
     created: "створено",
-    pending_1c: "очікує 1С",
-    sent_to_1c: "надіслано в 1С",
+    pending_1c: "створено",
+    sent_to_1c: "створено",
     cancelled: "скасовано",
   };
   const icons: Record<OrderStatus, React.ReactNode> = {
     created: <CircleDashed size={13} weight="bold" />,
-    pending_1c: <Clock size={13} weight="fill" />,
-    sent_to_1c: <PaperPlaneTilt size={13} weight="fill" />,
+    pending_1c: <CircleDashed size={13} weight="bold" />,
+    sent_to_1c: <CircleDashed size={13} weight="bold" />,
     cancelled: <Prohibit size={13} weight="fill" />,
   };
   return (
@@ -77,7 +75,7 @@ export function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
     paid: "bg-success-50 text-success-700",
   };
   const labels: Record<PaymentStatus, string> = {
-    none: "не визначено",
+    none: "не оплачено",
     unpaid: "не оплачено",
     paid: "оплачено",
   };

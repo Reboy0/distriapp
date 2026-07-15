@@ -20,6 +20,8 @@ class OrderCreate(BaseModel):
 
 class OrderItemOut(ORMModel):
     product_id: uuid.UUID
+    product_name: str
+    unit: str
     qty: Money
     unit_price_with_vat: Money
     sum: Money

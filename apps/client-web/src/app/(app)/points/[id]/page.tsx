@@ -117,7 +117,7 @@ export default function PointDashboardPage() {
           className="btn-primary mt-3 w-full text-base"
         >
           <Package size={20} weight="bold" />
-          Перейти в каталог
+          Зробити замовлення
         </Link>
       </div>
 

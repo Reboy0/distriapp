@@ -10,6 +10,7 @@ from app.db.base import Base, UUIDPKMixin
 
 if TYPE_CHECKING:
     from app.models.order import Order
+    from app.models.product import Product
 
 
 class OrderItem(UUIDPKMixin, Base):
@@ -24,3 +25,15 @@ class OrderItem(UUIDPKMixin, Base):
     sum: Mapped[Decimal] = mapped_column(Numeric(12, 2))
 
     order: Mapped["Order"] = relationship(back_populates="items")
+    # Order lines only store the price at time of purchase, not the name — the
+    # product may later be renamed/deleted, so the receipt still needs a live
+    # join to show what it was called. Always eager-load via selectinload.
+    product: Mapped["Product"] = relationship()
+
+    @property
+    def product_name(self) -> str:
+        return self.product.name
+
+    @property
+    def unit(self) -> str:
+        return self.product.unit

@@ -32,8 +32,18 @@ import {
  * transparently falls back to local mock data on network failure, so the
  * UI always renders something meaningful.
  */
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
+function resolveApiBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_BASE_URL) return process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (typeof window !== "undefined") {
+    // Single-VPS deploy with no domain yet: reach the backend on the same
+    // host the app was opened from, fixed port 8000 — works for localhost,
+    // a bare IP, or a domain without any per-deploy env var.
+    return `${window.location.protocol}//${window.location.hostname}:8000/api/v1`;
+  }
+  return "http://localhost:8000/api/v1";
+}
+
+export const API_BASE_URL = resolveApiBaseUrl();
 
 class ApiError extends Error {
   constructor(public status: number, message: string) {

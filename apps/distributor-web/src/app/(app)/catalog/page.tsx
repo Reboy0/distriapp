@@ -160,22 +160,18 @@ export default function CatalogPage() {
                         </div>
                       </td>
                       <td>
-                        <button
-                          type="button"
-                          role="switch"
-                          aria-checked={product.is_new}
-                          disabled={busyId === product.id}
-                          onClick={() => toggleIsNew(product)}
-                          className={`relative h-6 w-11 rounded-full transition-colors ${
-                            product.is_new ? "bg-brand-600" : "bg-slate-300"
-                          }`}
-                        >
-                          <span
-                            className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
-                              product.is_new ? "translate-x-5" : "translate-x-0.5"
-                            }`}
+                        <label className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center">
+                          <input
+                            type="checkbox"
+                            role="switch"
+                            className="peer sr-only"
+                            checked={product.is_new}
+                            disabled={busyId === product.id}
+                            onChange={() => toggleIsNew(product)}
                           />
-                        </button>
+                          <span className="absolute inset-0 rounded-full bg-slate-300 transition-colors peer-checked:bg-brand-600 peer-disabled:opacity-50" />
+                          <span className="absolute left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5" />
+                        </label>
                       </td>
                       <td>
                         <button

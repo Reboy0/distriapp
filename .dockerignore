@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+.next
+**/.next
+.expo
+**/.expo
+.venv
+**/.venv
+.turbo
+**/.turbo
+.git
+apps/mobile
+backend/.venv

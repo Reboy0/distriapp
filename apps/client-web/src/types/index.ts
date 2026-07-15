@@ -41,6 +41,8 @@ export type PaymentStatus = "none" | "unpaid" | "paid";
 
 export interface OrderItem {
   product_id: ID;
+  product_name: string;
+  unit: string;
   qty: number;
   unit_price_with_vat: number;
   sum: number;

@@ -8,7 +8,7 @@ export function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
     paid: "bg-green-100 text-green-700",
   };
   const labels: Record<PaymentStatus, string> = {
-    none: "не визначено",
+    none: "не оплачено",
     unpaid: "не оплачено",
     paid: "оплачено",
   };
@@ -18,14 +18,14 @@ export function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
 export function OrderStatusBadge({ status }: { status: OrderStatus }) {
   const map: Record<OrderStatus, string> = {
     created: "bg-slate-100 text-slate-600",
-    pending_1c: "bg-amber-100 text-amber-700",
-    sent_to_1c: "bg-blue-100 text-blue-700",
+    pending_1c: "bg-slate-100 text-slate-600",
+    sent_to_1c: "bg-slate-100 text-slate-600",
     cancelled: "bg-red-100 text-red-700",
   };
   const labels: Record<OrderStatus, string> = {
     created: "створено",
-    pending_1c: "очікує 1С",
-    sent_to_1c: "надіслано в 1С",
+    pending_1c: "створено",
+    sent_to_1c: "створено",
     cancelled: "скасовано",
   };
   return <span className={`badge ${map[status]}`}>{labels[status]}</span>;

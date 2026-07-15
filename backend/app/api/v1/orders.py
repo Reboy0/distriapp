@@ -16,6 +16,7 @@ from app.db.session import get_db
 from app.integrations.onec.base import OneCConnector
 from app.models.enums import PaymentStatus
 from app.models.order import Order
+from app.models.order_item import OrderItem
 from app.models.point_of_sale import PointOfSale
 from app.models.product import Product
 from app.schemas.order import (
@@ -78,6 +79,8 @@ async def submit_order(
 
     await db.commit()
     await db.refresh(order, attribute_names=["items"])
+    for item in order.items:
+        await db.refresh(item, attribute_names=["product"])
     await broadcast_order_update(order)
     return order
 
@@ -93,11 +96,11 @@ async def list_orders(
     distributor, by payment status per ORD-9) — same endpoint, scoped by
     the caller's role."""
     if ctx.role == "client":
-        query = select(Order).options(selectinload(Order.items)).where(
+        query = select(Order).options(selectinload(Order.items).selectinload(OrderItem.product)).where(
             Order.client_id == ctx.subject_id
         )
     else:
-        query = select(Order).options(selectinload(Order.items)).where(
+        query = select(Order).options(selectinload(Order.items).selectinload(OrderItem.product)).where(
             Order.distributor_id == ctx.tenant_id
         )
     if point_id is not None:
@@ -109,7 +112,7 @@ async def list_orders(
 
 
 async def _get_order_or_404(db: AsyncSession, ctx: AuthContext, order_id: uuid.UUID) -> Order:
-    query = select(Order).options(selectinload(Order.items)).where(Order.id == order_id)
+    query = select(Order).options(selectinload(Order.items).selectinload(OrderItem.product)).where(Order.id == order_id)
     if ctx.role == "client":
         query = query.where(Order.client_id == ctx.subject_id)
     else:
@@ -150,7 +153,7 @@ async def cancel_order_endpoint(
     """ORD-11: comment required; nothing is changed in 1C automatically."""
     result = await db.execute(
         select(Order)
-        .options(selectinload(Order.items))
+        .options(selectinload(Order.items).selectinload(OrderItem.product))
         .where(Order.id == order_id, Order.distributor_id == ctx.tenant_id)
     )
     order = result.scalar_one_or_none()
@@ -176,7 +179,7 @@ async def update_payment_status(
 
     result = await db.execute(
         select(Order)
-        .options(selectinload(Order.items))
+        .options(selectinload(Order.items).selectinload(OrderItem.product))
         .where(Order.id == order_id, Order.distributor_id == ctx.tenant_id)
     )
     order = result.scalar_one_or_none()
@@ -200,7 +203,7 @@ async def update_payment_link(
     whatever payment tool they already use; the client just sees/clicks it."""
     result = await db.execute(
         select(Order)
-        .options(selectinload(Order.items))
+        .options(selectinload(Order.items).selectinload(OrderItem.product))
         .where(Order.id == order_id, Order.distributor_id == ctx.tenant_id)
     )
     order = result.scalar_one_or_none()
@@ -210,5 +213,7 @@ async def update_payment_link(
     order.payment_url = payload.payment_url
     await db.commit()
     await db.refresh(order, attribute_names=["items"])
+    for item in order.items:
+        await db.refresh(item, attribute_names=["product"])
     await broadcast_order_update(order)
     return order

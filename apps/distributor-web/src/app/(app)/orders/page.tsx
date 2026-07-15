@@ -11,8 +11,6 @@ import type { Order, OrderStatus, PointOfSale } from "@/types";
 const STATUS_OPTIONS: { value: OrderStatus | "all"; label: string }[] = [
   { value: "all", label: "Усі статуси" },
   { value: "created", label: "Створено" },
-  { value: "pending_1c", label: "Очікує 1С" },
-  { value: "sent_to_1c", label: "Надіслано в 1С" },
   { value: "cancelled", label: "Скасовано" },
 ];
 
@@ -46,7 +44,13 @@ export default function OrdersPage() {
   const filtered = useMemo(() => {
     return orders.filter((o) => {
       if (pointFilter !== "all" && o.point_id !== pointFilter) return false;
-      if (statusFilter !== "all" && o.status !== statusFilter) return false;
+      if (statusFilter === "created") {
+        // pending_1c/sent_to_1c are also displayed as "створено" in the UI
+        // (see OrderStatusBadge), so the filter must match all three.
+        if (o.status === "cancelled") return false;
+      } else if (statusFilter !== "all" && o.status !== statusFilter) {
+        return false;
+      }
       return true;
     });
   }, [orders, pointFilter, statusFilter]);

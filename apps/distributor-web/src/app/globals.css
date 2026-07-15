@@ -48,7 +48,11 @@ body {
 }
 
 table.data-table {
-  @apply w-full border-collapse text-sm;
+  /* min-width forces horizontal scroll (via the .card overflow-x-auto
+     wrapper each table sits in) on narrow/phone viewports instead of
+     squishing cell content — squished flex children (input+button,
+     select+button) were visually overlapping on mobile. */
+  @apply w-full min-w-[720px] border-collapse text-sm;
 }
 
 table.data-table th {
